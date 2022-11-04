@@ -1,19 +1,27 @@
-const myArray = [1, 10, 3, 6, 'ArrayElement'];
+const myArray = [1, 10, 6, 'ArrayElement', {}, 3, {'name': 'date', 'val': 20221104}, null, false, ['date', 20221104]];
+const myArrayTest = [1, 2, 4, 3];
 
 /**
  * 1. Log to console 3 and '{}'
  * Please, use more than on solution
  */
 
-// console.log(`3: ${}`);
-// console.log(`{}: ${}`);
+Array.prototype.last = function () {
+	return this[this.length - 1];
+}
+
+console.log(3);
+console.log('{}');
+console.log(myArray);
+console.log(myArrayTest);
+console.log(typeof myArray.last());
 
 /**
  *  2. Log type of each element
  */
 
-myArray.forEach(() => {
-    console.log();
+myArray.forEach(element => {
+	console.log(typeof element);
 });
 
 /**
@@ -21,10 +29,19 @@ myArray.forEach(() => {
  *  Should return Boolean
  */
 
-const isNumber = myArray.YOUR_METHOD;
+/**
+ * @returns {boolean}
+ */
+Array.prototype.isAllElementsNumbers = function () {
+	return this.every(element => typeof element === 'number');
+}
+
+const isNumber = myArray.isAllElementsNumbers();
+const isNumberTest = myArrayTest.isAllElementsNumbers();
 
 console.log({
-    isNumber,
+	isNumber,
+	isNumberTest,
 });
 
 /**
@@ -32,10 +49,27 @@ console.log({
  * Should return Boolean
  */
 
-const isBiggerThanFive = myArray.YOUR_METHOD;
+/**
+ * @param num number
+ * @returns {boolean}
+ */
+Array.prototype.isOneElementMoreNumber = function (num = 5) {
+	if (typeof num !== 'number') {
+		throw '"num" is not are number';
+	}
+	return this.some(element => element > num);
+	/**
+	 * OR return typeof this.find(element => element > num) !== 'undefined';
+	 */
+}
+
+const isBiggerThanNumber = myArray.isOneElementMoreNumber(5);
+const isBiggerThanNumberTest = myArrayTest.isOneElementMoreNumber();
 
 console.log({
-    isBiggerThanFive,
+	isBiggerThanNumber,
+	isBiggerThanNumberTest,
+	//'error': myArrayTest.isOneElementMoreNumber('5'),
 });
 
 /**
@@ -43,10 +77,25 @@ console.log({
  * Should return another Array
  */
 
-const elementsBiggerThanFive = myArray.YOUR_METHOD;
+/**
+ *
+ * @param num number
+ * @returns {*[]}
+ */
+Array.prototype.isFilterElementMoreNumber = function (num = 5) {
+	if (typeof num !== 'number') {
+		throw '"num" is not are number';
+	}
+	return this.filter(element => element > num);
+}
+
+const elementsBiggerThanNumber = myArray.isFilterElementMoreNumber(3);
+const elementsBiggerThanNumberTest = myArrayTest.isFilterElementMoreNumber();
 
 console.log({
-    elementsBiggerThanFive,
+	elementsBiggerThanNumber,
+	elementsBiggerThanNumberTest,
+	//'error': myArrayTest.isFilterElementMoreNumber('5')
 });
 
 /**
@@ -54,30 +103,67 @@ console.log({
  * Should return another Array
  */
 
-const multiplied = myArray.YOUR_METHOD;
+/**
+ *
+ * @returns []
+ */
+Array.prototype.allElementsDouble = function () {
+	return this
+		.filter(element => typeof element === 'number')
+		.map(element => element * 2);
+}
+
+const multiplied = myArray.allElementsDouble();
+const multipliedTest = myArrayTest.allElementsDouble();
+const multipliedEmpty = [].allElementsDouble();
 
 console.log({
-    multiplied,
+	multiplied,
+	multipliedTest,
+	multipliedEmpty,
 });
 
 /**
  * 7. Calculate array sum
  */
 
-const sum = myArray.reduce();
+/**
+ *
+ * @returns {*}
+ */
+Array.prototype.isAllElementsNumbersSum = function () {
+	let result = 0;
+	return this
+		.filter(element => typeof element === 'number')
+		.reduce((prevElement, element) => prevElement + element, result);
+}
+
+// TODO: @VitaliyDanchul: Don't type answer in question)))
+const sum = myArray.isAllElementsNumbersSum();
+const sumTest = myArrayTest.isAllElementsNumbersSum();
+const sumEmpty = [].isAllElementsNumbersSum();
 
 console.log({
-    sum,
+	sum,
+	sumTest,
+	sumEmpty,
 });
 
 /**
  * 8. Sort array in ascending and descending order
  */
 
-const asc = myArray.YOUR_METHOD;
-const desc = myArray.YOUR_METHOD;
+function forCompareNumbers(a, b) {
+	return a - b;
+}
+const asc = myArray.slice().sort(forCompareNumbers);
+const ascTest = myArray.slice().sort();
+const desc = myArray.slice().sort(forCompareNumbers).reverse();
+const descTest = myArray.slice().sort().reverse();
 
 console.log({
-    asc,
-    desc,
+	asc,
+	ascTest,
+	desc,
+	descTest,
 });
