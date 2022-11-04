@@ -1,3 +1,11 @@
+const invoice = {
+	firstName: 'Node',
+	lastName : 'Developer',
+	createdAt: '2022-10-31T22:50:59.305Z',
+	amount   : 150,
+	currency : 'USD',
+};
+
 /**
  * 1. Write a funcion that accepts your firstName and lastName
  * Should return 'I'm firstName lastName'
