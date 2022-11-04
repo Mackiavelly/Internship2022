@@ -10,3 +10,7 @@ nbproject
 .node_history
 .history
 .vscode
+/package-lock.json
+/week0/users.json
+/week0/todos.json
+/week0/albums.json
