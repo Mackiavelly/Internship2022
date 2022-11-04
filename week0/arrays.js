@@ -10,10 +10,14 @@ Array.prototype.last = function () {
 	return this[this.length - 1];
 }
 
-console.log(3);
-console.log('{}');
 console.log(myArray);
 console.log(myArrayTest);
+console.log(3); // Smile)
+console.log('{}'); // Smile)
+console.log(`${myArray[3]}`);
+console.log(`${myArray[6]}`);
+console.log(`${myArray[6].name}`);
+console.log(`${myArray[25]}`);
 console.log(typeof myArray.last());
 
 /**
