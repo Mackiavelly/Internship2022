@@ -12,7 +12,7 @@ const invoice = {
  */
 
 function sayWho(obj) {
-	return `I'm  ${obj.firstName} ${obj.lastName}`;
+	return `I'm ${obj.firstName} ${obj.lastName}`;
 }
 
 function sayWhoTest(first = '', last = '') {
