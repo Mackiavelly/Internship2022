@@ -1,9 +1,9 @@
 const invoice = {
-	firstName: 'Node',
-	lastName : 'Developer',
-	createdAt: '2022-10-31T22:50:59.305Z',
-	amount   : 150,
-	currency : 'USD',
+    firstName: 'Node',
+    lastName: 'Developer',
+    createdAt: '2022-10-31T22:50:59.305Z',
+    amount: 150,
+    currency: 'USD',
 };
 
 /**
@@ -12,15 +12,10 @@ const invoice = {
  */
 
 function sayWho(obj) {
-	return `I'm ${obj.firstName} ${obj.lastName}`;
-}
-
-function sayWhoTest(first = '', last = '') {
-	return 'I\'m ' + first + ' ' + last;
+    return `I'm ${obj.firstName} ${obj.lastName}`;
 }
 
 console.log(sayWho(invoice));
-console.log(sayWhoTest(invoice.firstName, invoice.lastName));
 
 /**
  * 2. Write a function that accepts numbers and return their sum
@@ -28,13 +23,15 @@ console.log(sayWhoTest(invoice.firstName, invoice.lastName));
  */
 
 function countSum(...params) {
-	let result = 0;
-	for (const param of params) {
-		if (typeof +param === 'number') {
-			result += parseFloat(param);
-		}
-	}
-	return result;
+    let result = 0;
+
+    for (const param of params) {
+        if (typeof +param === 'number') {
+            result += parseFloat(param);
+        }
+    }
+
+    return result;
 }
 
 console.log(countSum(4, 5, 23));
@@ -47,7 +44,7 @@ console.log(countSum(1, 2, 3.56, '2.44'));
  */
 
 function countLetters(string = '', letter = '') {
-	return string.split(letter).length - 1;
+    return string.split(letter).length - 1;
 }
 
 console.log(countLetters('Node developer', 'd'));
@@ -57,9 +54,9 @@ console.log(countLetters('Node developer', 'd'));
  */
 
 function getRandom(min, max) {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 console.log(getRandom(0, 10));
-console.log(getRandom(5,15));
+console.log(getRandom(5, 15));
 console.log(getRandom(90, 200));

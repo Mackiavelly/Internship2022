@@ -1,4 +1,4 @@
-const myArray = [1, 10, 6, 'ArrayElement', {}, 3, {'name': 'date', 'val': 20221104}, null, false, ['date', 20221104]];
+const myArray = [1, 10, 6, 'ArrayElement', {}, 3, { name: 'date', val: 20221104 }, null, false, ['date', 20221104]];
 const myArrayTest = [1, 2, 4, 3];
 
 /**
@@ -8,9 +8,6 @@ const myArrayTest = [1, 2, 4, 3];
 
 // console.log(`3: ${}`);
 // console.log(`6: ${}`);
-Array.prototype.last = function () {
-	return this[this.length - 1];
-}
 
 console.log(myArray);
 console.log(myArrayTest);
@@ -20,14 +17,13 @@ console.log(`${myArray[3]}`);
 console.log(`${myArray[6]}`);
 console.log(`${myArray[6].name}`);
 console.log(`${myArray[25]}`);
-console.log(typeof myArray.last());
 
 /**
  *  2. Log type of each element
  */
 
-myArray.forEach(element => {
-	console.log(typeof element);
+myArray.forEach((element) => {
+    console.log(typeof element);
 });
 
 /**
@@ -35,19 +31,12 @@ myArray.forEach(element => {
  *  Should return Boolean
  */
 
-/**
- * @returns {boolean}
- */
-Array.prototype.isAllElementsNumbers = function () {
-	return this.every(element => typeof element === 'number');
-}
-
-const isNumber = myArray.isAllElementsNumbers();
-const isNumberTest = myArrayTest.isAllElementsNumbers();
+const isNumber = myArray.every((element) => typeof element === 'number');
+const isNumberTest = myArrayTest.every((element) => typeof element === 'number');
 
 console.log({
-	isNumber,
-	isNumberTest,
+    isNumber,
+    isNumberTest,
 });
 
 /**
@@ -55,27 +44,12 @@ console.log({
  * Should return Boolean
  */
 
-/**
- * @param num number
- * @returns {boolean}
- */
-Array.prototype.isOneElementMoreNumber = function (num = 5) {
-	if (typeof num !== 'number') {
-		throw '"num" is not are number';
-	}
-	return this.some(element => element > num);
-	/**
-	 * OR return typeof this.find(element => element > num) !== 'undefined';
-	 */
-}
-
-const isBiggerThanNumber = myArray.isOneElementMoreNumber(5);
-const isBiggerThanNumberTest = myArrayTest.isOneElementMoreNumber();
+const isBiggerThanNumber = myArray.some((element) => element > 5);
+const isBiggerThanNumberTest = myArrayTest.some((element) => element > 5);
 
 console.log({
-	isBiggerThanNumber,
-	isBiggerThanNumberTest,
-	//'error': myArrayTest.isOneElementMoreNumber('5'),
+    isBiggerThanNumber,
+    isBiggerThanNumberTest,
 });
 
 /**
@@ -83,25 +57,12 @@ console.log({
  * Should return another Array
  */
 
-/**
- *
- * @param num number
- * @returns {*[]}
- */
-Array.prototype.isFilterElementMoreNumber = function (num = 5) {
-	if (typeof num !== 'number') {
-		throw '"num" is not are number';
-	}
-	return this.filter(element => element > num);
-}
-
-const elementsBiggerThanNumber = myArray.isFilterElementMoreNumber(3);
-const elementsBiggerThanNumberTest = myArrayTest.isFilterElementMoreNumber();
+const elementsBiggerThanNumber = myArray.filter((element) => element > 5);
+const elementsBiggerThanNumberTest = myArrayTest.filter((element) => element > 5);
 
 console.log({
-	elementsBiggerThanNumber,
-	elementsBiggerThanNumberTest,
-	//'error': myArrayTest.isFilterElementMoreNumber('5')
+    elementsBiggerThanNumber,
+    elementsBiggerThanNumberTest,
 });
 
 /**
@@ -109,50 +70,28 @@ console.log({
  * Should return another Array
  */
 
-/**
- *
- * @returns []
- */
-Array.prototype.allElementsDouble = function () {
-	return this
-		.filter(element => typeof element === 'number')
-		.map(element => element * 2);
-}
-
-const multiplied = myArray.allElementsDouble();
-const multipliedTest = myArrayTest.allElementsDouble();
-const multipliedEmpty = [].allElementsDouble();
+const multiplied = myArray.filter((element) => typeof element === 'number').map((element) => element * 2);
+const multipliedTest = myArrayTest.filter((element) => typeof element === 'number').map((element) => element * 2);
+const multipliedEmpty = [].filter((element) => typeof element === 'number').map((element) => element * 2);
 
 console.log({
-	multiplied,
-	multipliedTest,
-	multipliedEmpty,
+    multiplied,
+    multipliedTest,
+    multipliedEmpty,
 });
 
 /**
  * 7. Calculate array sum
  */
 
-/**
- *
- * @returns {*}
- */
-Array.prototype.isAllElementsNumbersSum = function () {
-	let result = 0;
-	return this
-		.filter(element => typeof element === 'number')
-		.reduce((prevElement, element) => prevElement + element, result);
-}
-
-// TODO: @VitaliyDanchul: Don't type answer in question)))
-const sum = myArray.isAllElementsNumbersSum();
-const sumTest = myArrayTest.isAllElementsNumbersSum();
-const sumEmpty = [].isAllElementsNumbersSum();
+const sum = myArray.filter((element) => typeof element === 'number').reduce((prevElement, element) => prevElement + element, 0);
+const sumTest = myArrayTest.filter((element) => typeof element === 'number').reduce((prevElement, element) => prevElement + element, 0);
+const sumEmpty = [].filter((element) => typeof element === 'number').reduce((prevElement, element) => prevElement + element, 0);
 
 console.log({
-	sum,
-	sumTest,
-	sumEmpty,
+    sum,
+    sumTest,
+    sumEmpty,
 });
 
 /**
@@ -160,7 +99,7 @@ console.log({
  */
 
 function forCompareNumbers(a, b) {
-	return a - b;
+    return a - b;
 }
 const asc = myArray.slice().sort(forCompareNumbers);
 const ascTest = myArray.slice().sort();
@@ -168,8 +107,8 @@ const desc = myArray.slice().sort(forCompareNumbers).reverse();
 const descTest = myArray.slice().sort().reverse();
 
 console.log({
-	asc,
-	ascTest,
-	desc,
-	descTest,
+    asc,
+    ascTest,
+    desc,
+    descTest,
 });

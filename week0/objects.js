@@ -1,57 +1,45 @@
 const invoice = {
-	firstName: 'Node',
-	lastName : 'Developer',
-	createdAt: '2022-10-31T22:50:59.305Z',
-	amount   : 150,
-	currency : 'USD',
+    firstName: 'Node',
+    lastName: 'Developer',
+    createdAt: '2022-10-31T22:50:59.305Z',
+    amount: 150,
+    currency: 'USD',
 };
 
 /**
  * 1. Log firstName and lastName in dot notation and bracket notation
  */
 
-console.log('Name: ('+invoice.firstName+'.'+invoice.lastName+')');
 console.log(`Name: (${invoice.firstName}.${invoice.lastName})`);
-console.log("Name: ("+Object.values(invoice).slice(0, 2).join('.')+")"); // )))
-
 
 /**
  * 2. Log Object Keys
  */
 
-Object.prototype.getKeys = function () {
-	return Object.keys(this);
-}
-const keys = invoice.getKeys();
+const keys = Object.keys(invoice);
 
 console.log({
-	keys,
+    keys,
 });
 
 /**
  * 3. Log Object values
  */
 
-Object.prototype.getValues = function () {
-	return Object.values(this);
-}
-const values = invoice.getValues();
+const values = Object.values(invoice);
 
 console.log({
-	values,
+    values,
 });
 
 /**
  * 4. Log Object entries
  */
 
-Object.prototype.getEntries = function () {
-	return Object.entries(this);
-}
-const entries = invoice.getEntries();
+const entries = Object.entries(invoice);
 
 console.log({
-	entries,
+    entries,
 });
 
 /**
@@ -59,14 +47,15 @@ console.log({
  * Please, use more than one solution
  */
 
-const copiedInvoice = Object.assign({}, invoice);
-const copiedInvoiceTest = Object.assign({}, invoice, {firstName: 'NO React'});
+const copiedInvoice = { ...invoice };
+const copiedInvoiceTest = { ...invoice, firstName: 'NO React' };
+
 copiedInvoice.firstName = 'React';
 
 console.log({
-	invoice,
-	copiedInvoice,
-	copiedInvoiceTest,
+    invoice,
+    copiedInvoice,
+    copiedInvoiceTest,
 });
 
 /**
@@ -78,9 +67,9 @@ copiedInvoice.amount = 300;
 copiedInvoiceTest.amount = 2000;
 
 console.log({
-	invoice,
-	copiedInvoice,
-	copiedInvoiceTest,
+    invoice,
+    copiedInvoice,
+    copiedInvoiceTest,
 });
 
 /**
@@ -88,9 +77,5 @@ console.log({
  */
 
 keys.forEach((key) => {
-	console.log(`${key}-${invoice[key]}`);
+    console.log(`${key}-${invoice[key]}`);
 });
-
-for (const [key, value] of entries) {
-	console.log(`${key}: ${value}`);
-}

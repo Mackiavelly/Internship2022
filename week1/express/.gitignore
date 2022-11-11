@@ -10,3 +10,5 @@ nbproject
 .node_history
 .history
 .vscode
+
+db.json
