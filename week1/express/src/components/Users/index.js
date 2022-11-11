@@ -32,7 +32,7 @@ async function userCreate(req, res) {
 
 async function userFind(req, res) {
     try {
-        const users = await UsersService.findUser(req.body);
+        const users = await UsersService.findUser(req.query);
 
         return res.status(201).json({
             data: users,

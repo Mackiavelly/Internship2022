@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/index', UserComponent.userFindAll);
 
-router.get('/user', UserComponent.userFindAll);
+router.get('/user', UserComponent.userFind);
 
 router.post('/create', UserComponent.userCreate);
 

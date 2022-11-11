@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const userObjectDefault = {
     name: '',
@@ -21,31 +21,38 @@ function fileSave(data, fileName = 'db.json') {
     });
 }
 
-function fileRead(fileName = 'db.json') {
-    fs.readFile(`${fileName}`, (error, data) => {
-        let result = [];
+async function fileRead(fileName = 'db.json') {
+    let result = [];
 
-        if (error) {
-            /**
-             * on a crutch through the knee
-             */
-            cl(`Error#001: File "${fileName}" open error.`);
-        } else {
-            result = JSON.parse(data.toString());
-        }
+    try {
+        const dbFile = await fs.readFile(`${fileName}`, (error, data) => {
+            if (error) {
+                cl(`Error#001: File "${fileName}" open error.`);
+            } else {
+                result = JSON.parse(data.toString());
+            }
+        });
 
-        return result;
-    });
+        result = JSON.parse(dbFile.toString());
+    } catch (error) {
+        cl(`Error#002: File "${fileName}" open error.`);
+    }
+
+    return result;
 }
 
-function findAllUsers() {
-    return fileRead();
+async function findAllUsers() {
+    const users = await fileRead();
+
+    return users;
 }
 
-function findUser(id) {
+async function findUser(request) {
+    const id = parseInt(request.id, 10);
+
     if (typeof id === 'number') {
-        const data = fileRead();
-        const user = data.at(id);
+        const data = await fileRead();
+        const user = data[id];
 
         return user === undefined ? [] : user;
     }
@@ -54,27 +61,24 @@ function findUser(id) {
     return [];
 }
 
-function createUser(req) {
-    cl(req.params);
-    const data = fileRead();
+async function createUser(request) {
+    const data = await fileRead();
 
-    data.push({ ...userObjectDefault, name: 'test-name', login: 'test-login' });
-    cl(data);
+    data.push({ ...userObjectDefault, name: 'test-name', login: 'test-login', ...request });
     fileSave(data);
 
-    return {
-        message: 'Created',
-    };
+    return { message: 'Created' };
 }
 
-function updateUser(id, data) {
+async function updateUser(request) {
+    const id = parseInt(request.id, 10);
     let result = {};
 
     if (typeof id === 'number') {
-        const user = findUser(id);
-        const dataBase = fileRead();
+        const user = await findUser(request.id);
+        const dataBase = await fileRead();
 
-        dataBase[id] = { ...userObjectDefault, user, data };
+        dataBase[id] = { ...userObjectDefault, ...user, ...request };
         fileSave(dataBase);
         result = { message: 'Updated' };
     } else {
@@ -84,11 +88,12 @@ function updateUser(id, data) {
     return result;
 }
 
-function deleteUser(id) {
+async function deleteUser(request) {
+    const id = parseInt(request.id, 10);
     let result = {};
 
     if (typeof id === 'number') {
-        const data = fileRead();
+        const data = await fileRead();
 
         data.splice(id, 1); // TODO: JOKE)))
         fileSave(data);
