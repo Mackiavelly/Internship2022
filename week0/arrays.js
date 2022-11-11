@@ -2,10 +2,12 @@ const myArray = [1, 10, 6, 'ArrayElement', {}, 3, {'name': 'date', 'val': 202211
 const myArrayTest = [1, 2, 4, 3];
 
 /**
- * 1. Log to console 3 and '{}'
+ * 1. Log 3 and 6 elements from myArray to console
  * Please, use more than on solution
  */
 
+// console.log(`3: ${}`);
+// console.log(`6: ${}`);
 Array.prototype.last = function () {
 	return this[this.length - 1];
 }
