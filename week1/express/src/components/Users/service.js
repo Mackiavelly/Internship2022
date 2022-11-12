@@ -48,17 +48,10 @@ async function findAllUsers() {
 }
 
 async function findUser(request) {
-    const id = parseInt(request.id, 10);
+    const data = await fileRead();
+    const user = data[request.id];
 
-    if (typeof id === 'number') {
-        const data = await fileRead();
-        const user = data[id];
-
-        return user === undefined ? [] : user;
-    }
-    cl('Id is not a number.');
-
-    return [];
+    return user === undefined ? [] : user;
 }
 
 async function createUser(request) {
@@ -71,38 +64,22 @@ async function createUser(request) {
 }
 
 async function updateUser(request) {
-    const id = parseInt(request.id, 10);
-    let result = {};
+    const user = await findUser(request.id);
+    const dataBase = await fileRead();
 
-    if (typeof id === 'number') {
-        const user = await findUser(request.id);
-        const dataBase = await fileRead();
+    dataBase[request.id] = { ...userObjectDefault, ...user, ...request };
+    fileSave(dataBase);
 
-        dataBase[id] = { ...userObjectDefault, ...user, ...request };
-        fileSave(dataBase);
-        result = { message: 'Updated' };
-    } else {
-        result = { message: 'Update error!' };
-    }
-
-    return result;
+    return { message: 'Updated' };
 }
 
 async function deleteUser(request) {
-    const id = parseInt(request.id, 10);
-    let result = {};
+    const data = await fileRead();
 
-    if (typeof id === 'number') {
-        const data = await fileRead();
+    data.splice(request.id, 1); // TODO: JOKE)))
+    fileSave(data);
 
-        data.splice(id, 1); // TODO: JOKE)))
-        fileSave(data);
-        result = { message: 'Deleted' };
-    } else {
-        result = { message: 'Delete error!' };
-    }
-
-    return result;
+    return { message: 'Deleted' };
 }
 
 module.exports = {
