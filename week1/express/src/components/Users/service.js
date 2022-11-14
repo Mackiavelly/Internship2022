@@ -57,6 +57,7 @@ async function findUser(request) {
 async function createUser(request) {
     const data = await fileRead();
 
+    // TODO: ESLint ??? for {}
     data.push({ ...userObjectDefault, name: 'test-name', login: 'test-login', ...request });
     fileSave(data);
 
