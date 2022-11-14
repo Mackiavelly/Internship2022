@@ -32,6 +32,8 @@ async function userCreate(req, res) {
 
 async function userFind(req, res) {
     try {
+        // TODO: Some test
+        // const { id, test, test2 } = req.params;
         const users = await UsersService.findUser(req.params);
 
         return res.status(201).json({
