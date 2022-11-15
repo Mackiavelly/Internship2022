@@ -64,11 +64,11 @@ async function createUser(request) {
     return { message: 'Created' };
 }
 
-async function updateUser(request) {
+async function updateUser(request, body) {
     const user = await findUser(request.id);
     const dataBase = await fileRead();
 
-    dataBase[request.id] = { ...userObjectDefault, ...user, ...request };
+    dataBase[request.id] = { ...userObjectDefault, ...user, ...body };
     fileSave(dataBase);
 
     return { message: 'Updated' };
