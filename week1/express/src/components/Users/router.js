@@ -1,18 +1,25 @@
 const { Router } = require('express');
 const UserComponent = require('./index');
+const Model = require('./schema');
+const Validation = require('../../config/validation');
+const ValidationToken = require('../../config/validationToken');
 
 const router = Router();
 
-router.get('/', UserComponent.userFindAll);
+router.get('/', Validation(Model.find), UserComponent.userFindAll);
 
-router.get('/:id(\\d+)', UserComponent.userFind);
+router.get('/:id', Validation(Model.find), UserComponent.userFind);
 
-router.post('/', UserComponent.userCreate);
+router.post('/sing-in', Validation(Model.singIn), UserComponent.userSingIn);
 
-router.delete('/:id(\\d+)', UserComponent.userDelete);
+router.post('/account', ValidationToken, UserComponent.userAccount);
 
-router.patch('/:id(\\d+)', UserComponent.userUpdate);
+router.post('/', Validation(Model.create), UserComponent.userCreate);
 
-router.put('/:id(\\d+)', UserComponent.userUpdate);
+router.delete('/:id', UserComponent.userDelete); // controller validate
+
+router.patch('/:id', Validation(Model.update), UserComponent.userUpdate);
+
+router.put('/:id', Validation(Model.update), UserComponent.userUpdate);
 
 module.exports = router;

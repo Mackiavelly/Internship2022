@@ -10,6 +10,7 @@ module.exports = {
     },
     rules: {
         indent: ['error', 4],
+        'no-tabs': ['error', { allowIndentationTabs: true }],
         'no-console': ['error', {
             allow: ['warn', 'error', 'log'],
         }],
