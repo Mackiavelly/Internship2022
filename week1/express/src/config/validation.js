@@ -1,8 +1,6 @@
 const middleware = (model) => (req, res, next) => {
     const data = { ...req.params, ...req.query, ...req.body };
 
-    console.log(data);
-
     const { error } = model.validate(data);
 
     if (error) {

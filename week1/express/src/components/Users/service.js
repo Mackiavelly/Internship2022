@@ -1,47 +1,10 @@
 // const fs = require('fs').promises;
 
 require('dotenv').config({ path: '.env' });
-const mongo = require('mongodb');
-
-const clientDB = new mongo.MongoClient(process.env.MONGO_URI);
-const db = clientDB.db('nodejs');
-const table = db.collection('users');
-
 const jwt = require('jsonwebtoken');
+const { mongo, connection } = require('../../config/mongoDb');
 
-// function cl(...params) {
-//     console.log(params);
-// }
-
-// function fileSave(data, fileName = 'db.json') {
-//     fs.writeFile(`${fileName}`, JSON.stringify(data), (error) => {
-//         if (error) {
-//             cl(error);
-//         } else {
-//             cl(`File "${fileName}" written successfully.`);
-//         }
-//     });
-// }
-
-// async function fileRead(fileName = 'db.json') {
-//     let result = [];
-
-//     try {
-//         const dbFile = await fs.readFile(`${fileName}`, (error, data) => {
-//             if (error) {
-//                 cl(`Error#001: File "${fileName}" open error.`);
-//             } else {
-//                 result = JSON.parse(data.toString());
-//             }
-//         });
-
-//         result = JSON.parse(dbFile.toString());
-//     } catch (error) {
-//         cl(`Error#002: File "${fileName}" open error.`);
-//     }
-
-//     return result;
-// }
+const collection = connection.collection('users');
 
 function generateAccessToken(data) {
     return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
@@ -52,19 +15,19 @@ function buildMongoId(id) {
 }
 
 async function findAllUsers(data) {
-    const users = await table.find(data).toArray();
+    const users = await collection.find(data).toArray();
 
     return users;
 }
 
 async function findUser(params, data) {
-    const users = await table.find({ ...buildMongoId(params.id), ...data }).toArray();
+    const users = await collection.find({ ...buildMongoId(params.id), ...data }).toArray();
 
     return users;
 }
 
 async function createUser(body) {
-    const userId = (await table.insertOne(body)).insertedId;
+    const userId = (await collection.insertOne(body)).insertedId;
 
     return {
         message: 'Created',
@@ -73,7 +36,7 @@ async function createUser(body) {
 }
 
 async function updateUser(params, body) {
-    const user = await table.updateOne(
+    const user = await collection.updateOne(
         buildMongoId(params.id),
         { $set: body },
     );
@@ -85,7 +48,7 @@ async function updateUser(params, body) {
 }
 
 async function deleteUser(params) {
-    const user = await table.deleteOne(buildMongoId(params.id));
+    const user = await collection.deleteOne(buildMongoId(params.id));
 
     return {
         message: 'Deleted',
@@ -94,7 +57,7 @@ async function deleteUser(params) {
 }
 
 async function singInUser(body) {
-    const userFind = await table.findOne(body);
+    const userFind = await collection.findOne(body);
 
     if (userFind === null) {
         return {
@@ -104,7 +67,7 @@ async function singInUser(body) {
 
     const { _id: userId } = userFind;
     const token = generateAccessToken({ id: userId });
-    const userUpdate = await table.updateOne(
+    const userUpdate = await collection.updateOne(
         userFind,
         { $set: { ...userFind, access_token: token } },
     );
@@ -117,7 +80,7 @@ async function singInUser(body) {
 }
 
 async function accountUser(params) {
-    const userFind = await table.findOne(buildMongoId(params.id));
+    const userFind = await collection.findOne(buildMongoId(params.id));
 
     if (userFind === null) {
         return {

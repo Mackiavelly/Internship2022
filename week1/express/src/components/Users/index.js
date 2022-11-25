@@ -1,5 +1,5 @@
 const UsersService = require('./service');
-const Model = require('./schema');
+const Schema = require('./schema');
 
 async function userFindAll(req, res) {
     try {
@@ -48,7 +48,7 @@ async function userFind(req, res) {
 
 async function userDelete(req, res) {
     try {
-        const { error } = Model.delete.validate(req.params);
+        const { error } = Schema.delete.validate(req.params);
 
         if (error) {
             return res.status(400).json({
