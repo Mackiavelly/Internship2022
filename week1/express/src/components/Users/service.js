@@ -2,9 +2,9 @@
 
 require('dotenv').config({ path: '.env' });
 const jwt = require('jsonwebtoken');
-const { mongo, connection } = require('../../config/mongoDb');
+const { mongo, db } = require('../../config/mongoDb');
 
-const collection = connection.collection('users');
+const collection = db.collection('users');
 
 function generateAccessToken(data) {
     return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
