@@ -2,7 +2,9 @@ const { Router } = require('express');
 const UserComponent = require('./index');
 const SchemaScenarios = require('./schema');
 const Validation = require('../../config/validation');
+const ValidationMongoose = require('../../config/validationMongoose');
 const ValidationToken = require('../../config/validationToken');
+const userModel = require('./model');
 
 const router = Router();
 
@@ -14,7 +16,7 @@ router.post('/sing-in', Validation(SchemaScenarios.singIn), UserComponent.userSi
 
 router.post('/account', ValidationToken, UserComponent.userAccount);
 
-router.post('/', Validation(SchemaScenarios.create), UserComponent.userCreate);
+router.post('/', ValidationMongoose(userModel), UserComponent.userCreate);
 
 router.delete('/:id', UserComponent.userDelete); // controller validate
 
