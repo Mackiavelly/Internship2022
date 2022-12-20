@@ -1,27 +1,27 @@
 const { Router } = require('express');
 const UserComponent = require('./index');
 const SchemaScenarios = require('./schema');
-const Validation = require('../../config/validation');
-const ValidationMongoose = require('../../config/validationMongoose');
+const validationJoi = require('../../config/validation');
+const validation = require('./validation');
 const ValidationToken = require('../../config/validationToken');
 const userModel = require('./model');
 
 const router = Router();
 
-router.get('/', Validation(SchemaScenarios.find), UserComponent.userFindAll);
+router.get('/', validationJoi(SchemaScenarios.find), UserComponent.userFindAll);
 
-router.get('/:id', Validation(SchemaScenarios.find), UserComponent.userFind);
+router.get('/:id', validationJoi(SchemaScenarios.find), UserComponent.userFind);
 
-router.post('/sing-in', Validation(SchemaScenarios.singIn), UserComponent.userSingIn);
+router.post('/sing-in', validationJoi(SchemaScenarios.singIn), UserComponent.userSingIn);
 
 router.post('/account', ValidationToken, UserComponent.userAccount);
 
-router.post('/', ValidationMongoose(userModel), UserComponent.userCreate);
+router.post('/', validation(userModel), UserComponent.userCreate);
 
 router.delete('/:id', UserComponent.userDelete); // controller validate
 
-router.patch('/:id', Validation(SchemaScenarios.update), UserComponent.userUpdate);
+router.patch('/:id', validation(userModel), UserComponent.userUpdate);
 
-router.put('/:id', Validation(SchemaScenarios.update), UserComponent.userUpdate);
+router.put('/:id', validationJoi(SchemaScenarios.update), UserComponent.userUpdate);
 
 module.exports = router;

@@ -105,7 +105,7 @@ async function userAccount(req, res) {
 	try {
 		const users = await UsersService.accountUser(req.params);
 
-		return res.status(201).json({
+		return res.status(200).json({
 			data: users,
 		});
 	} catch (error) {

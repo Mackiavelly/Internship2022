@@ -23,7 +23,7 @@ const rulesDelete = Joi.object({
 });
 const rulesUpdate = rulesCreate.concat(rulesDelete);
 const rulesSingIn = Joi.object({
-	username: ruleUserName.required(),
+	email: ruleEmail.required(),
 	password: rulePassword.required(),
 });
 const rulesAcconut = Joi.object({

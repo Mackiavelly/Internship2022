@@ -14,31 +14,38 @@ const userSchema = new Schema({
 		lowercase: true,
 		unique: true,
 		required: true,
-		match: [/^\w+([\.-_]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Type a valid email address'],
+		match: [/^\w+([.-_]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Type a valid email address'],
 		index: {
 			unique: true,
 		},
 	},
+	token: { type: String },
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function preSave(next) {
 	const user = this;
 
-	if (!user.isModified('password')) next();
+	if (!user.isModified('password')) return next();
 	bcrypt.genSalt(SALT, (errorSalt, salt) => {
 		if (errorSalt) return next(errorSalt);
 		bcrypt.hash(user.password, salt, (errorHash, hash) => {
 			if (errorHash) return next(errorHash);
 			user.password = hash;
-			next();
+
+			return next();
 		});
+
+		return next();
 	});
+
+	return next();
 });
 
-userSchema.methods.comparePassword = (candidatePassword, cb) => {
-	bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-		if (err) return cb(err);
-		cb(null, isMatch);
+userSchema.methods.comparePassword = async function comparePassword(candidatePassword, callBack) {
+	return bcrypt.compareSync(candidatePassword, this.password, (error, isMatch) => {
+		if (error) return callBack(error);
+
+		return callBack(null, isMatch);
 	});
 };
 

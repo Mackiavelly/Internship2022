@@ -1,5 +1,5 @@
 function findAll() {
-    return [];
+	return [];
 }
 
 /**
@@ -7,12 +7,12 @@ function findAll() {
  *  we will do manipulations here
  */
 function create() {
-    return {
-        message: 'Created',
-    };
+	return {
+		message: 'Created',
+	};
 }
 
 module.exports = {
-    create,
-    findAll,
+	create,
+	findAll,
 };

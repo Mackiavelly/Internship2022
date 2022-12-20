@@ -1,19 +1,17 @@
-// const fs = require('fs').promises;
-
-require('dotenv').config({ path: '.env' });
 const jwt = require('jsonwebtoken');
-const { mongo, connection } = require('../../config/mongoConnection');
-const { mongoose } = require('../../config/mongooseConnection');
+const { mongoose, db } = require('../../config/mongooseConnection');
 const User = require('./model');
 
-const collection = connection.collection('users');
+const collection = db.collection('users');
 
 function generateAccessToken(data) {
 	return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
 
 function buildMongoId(id) {
-	return { _id: new mongo.ObjectId(id) };
+	const { ObjectId } = mongoose.Types;
+
+	return { _id: new ObjectId(id) };
 }
 
 async function findAllUsers(data) {
@@ -29,7 +27,6 @@ async function findUser(params, data) {
 }
 
 async function createUser(body) {
-	// const userId = (await collection.insertOne(body)).insertedId;
 	const user = new User(body);
 	const result = await user.save();
 
@@ -65,30 +62,42 @@ async function deleteUser(params) {
 }
 
 async function singInUser(body) {
-	const userFind = await collection.findOne(body);
+	const user = await User.findOne({ email: body.email });
 
-	if (userFind === null) {
+	console.log(user);
+
+	if (user === null) {
 		return {
-			message: 'SingIn: name or pass are wrong!',
+			message: 'SingIn: user no exists!',
 		};
 	}
 
-	const { _id: userId } = userFind;
-	const token = generateAccessToken({ id: userId });
-	const userUpdate = await collection.updateOne(
-		userFind,
-		{ $set: { ...userFind, access_token: token } },
-	);
+	const compare = await user.comparePassword(body.password, (error, isMatch) => {
+		if (error) throw error;
+
+		return isMatch;
+	});
+
+	if (compare) {
+		const { _id: userId } = user;
+		const token = generateAccessToken({ id: userId });
+
+		user.token = token;
+		await user.save();
+
+		return {
+			message: 'Sing In - Success',
+			detail: user,
+		};
+	}
 
 	return {
-		message: 'Sing In - Success',
-		access_token: token,
-		detail: userUpdate,
+		message: 'SingIn: wrong password!',
 	};
 }
 
 async function accountUser(params) {
-	const userFind = await collection.findOne(buildMongoId(params.id));
+	const userFind = await User.findOne(buildMongoId(params.id));
 
 	if (userFind === null) {
 		return {
