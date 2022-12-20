@@ -105,6 +105,8 @@ async function accountUser(params) {
 		};
 	}
 
+	console.log(userFind);
+
 	return {
 		message: 'Account - Success',
 		user: userFind,

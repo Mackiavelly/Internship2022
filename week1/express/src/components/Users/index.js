@@ -20,7 +20,7 @@ async function userCreate(req, res) {
 	try {
 		const users = await UsersService.createUser(req.body);
 
-		return res.status(201).json({
+		return res.status(200).json({
 			data: users,
 		});
 	} catch (error) {
@@ -35,7 +35,7 @@ async function userFind(req, res) {
 	try {
 		const users = await UsersService.findUser(req.params, { ...req.query, ...req.body });
 
-		return res.status(201).json({
+		return res.status(200).json({
 			data: users,
 		});
 	} catch (error) {
@@ -60,7 +60,7 @@ async function userDelete(req, res) {
 
 		const users = await UsersService.deleteUser(req.params);
 
-		return res.status(201).json({
+		return res.status(200).json({
 			data: users,
 		});
 	} catch (error) {
@@ -75,7 +75,7 @@ async function userUpdate(req, res) {
 	try {
 		const users = await UsersService.updateUser(req.params, req.body);
 
-		return res.status(201).json({
+		return res.status(200).json({
 			data: users,
 		});
 	} catch (error) {
@@ -90,7 +90,7 @@ async function userSingIn(req, res) {
 	try {
 		const users = await UsersService.singInUser(req.body);
 
-		return res.status(201).json({
+		return res.status(200).json({
 			data: users,
 		});
 	} catch (error) {
@@ -103,10 +103,10 @@ async function userSingIn(req, res) {
 
 async function userAccount(req, res) {
 	try {
-		const users = await UsersService.accountUser(req.params);
+		const user = await UsersService.accountUser(req.params);
 
 		return res.status(200).json({
-			data: users,
+			data: user,
 		});
 	} catch (error) {
 		return res.status(500).json({
