@@ -28,15 +28,15 @@ async function findUser(params, data) {
 
 async function createUser(body) {
 	const user = new User(body);
-	const result = await user.save();
+	const userSave = await user.save();
 
-	if (result.error) {
-		return result;
+	if (userSave.error) {
+		return userSave;
 	}
 
 	return {
 		message: 'Created',
-		model: result,
+		user: userSave,
 	};
 }
 
@@ -48,7 +48,7 @@ async function updateUser(params, body) {
 
 	return {
 		message: 'Updated',
-		detail: user,
+		user,
 	};
 }
 
@@ -57,7 +57,7 @@ async function deleteUser(params) {
 
 	return {
 		message: 'Deleted',
-		detail: user,
+		user,
 	};
 }
 

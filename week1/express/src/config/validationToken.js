@@ -1,17 +1,25 @@
 const jwt = require('jsonwebtoken');
 
-function authenticateToken(req, res, next) {
+const verify = (token, key, options = {}) => new Promise((resolve, reject) => {
+	jwt.verify(token, key, options, (error, payload) => {
+		if (error) {
+			reject(error);
+
+			return;
+		}
+		resolve(payload);
+	});
+});
+
+async function authenticateToken(req, res, next) {
 	const authHeader = req.headers.authorization;
 	const token = authHeader && authHeader.split(' ')[1];
 
 	if (token == null) return res.sendStatus(401);
 
-	jwt.verify(token, process.env.TOKEN_SECRET, (error, user) => {
-		if (error) return res.sendStatus(403);
-		req.params.id = user.id;
+	const user = await verify(token, process.env.TOKEN_SECRET);
 
-		return next();
-	});
+	req.params.id = user.id;
 
 	return next();
 }
