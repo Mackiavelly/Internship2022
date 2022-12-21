@@ -75,10 +75,26 @@ async function update(req, res) {
 	}
 }
 
+async function generate(req, res) {
+	try {
+		const tasks = await service.generate(req.params.count);
+
+		return res.status(201).json({
+			data: tasks,
+		});
+	} catch (error) {
+		return res.status(500).json({
+			error: error.message,
+			details: null,
+		});
+	}
+}
+
 module.exports = {
 	findAll,
 	create,
 	remove,
 	update,
 	find,
+	generate,
 };

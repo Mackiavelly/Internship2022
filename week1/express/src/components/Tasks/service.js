@@ -1,28 +1,27 @@
-const { db } = require('../../config/mongooseConnection');
-const Model = require('./model');
-
-const collection = db.collection('tasks');
+const { mongoose, db } = require('../../config/mongooseConnection');
+const { Model } = require('./model');
 
 function buildMongoId(id) {
-	return { _id: id };
+	const { ObjectId } = mongoose.Types;
+
+	return { _id: new ObjectId(id) };
 }
 
 async function findAll(data) {
-	const users = await collection.find(data).toArray();
+	const tasks = await Model.find(data);
 
-	return users;
+	return tasks;
 }
 
 async function find(params, data) {
-	const users = await collection.find({ ...buildMongoId(params.id), ...data }).toArray();
+	const tasks = await Model.find({ ...buildMongoId(params.id), ...data });
 
-	return users;
+	return tasks;
 }
 
 async function create(body) {
-	// const userId = (await collection.insertOne(body)).insertedId;
-	const user = new Model(body);
-	const result = await user.save();
+	const tasks = new Model(body);
+	const result = await tasks.save();
 
 	if (result.error) {
 		return result;
@@ -35,23 +34,45 @@ async function create(body) {
 }
 
 async function update(params, body) {
-	const user = await collection.updateOne(
-		buildMongoId(params.id),
-		{ $set: body },
-	);
+	const task = await Model.findByIdAndUpdate(params.id, { estimatedTime: body.estimatedTime }, { returnDocument: 'after', runValidators: true });
 
 	return {
 		message: 'Updated',
-		detail: user,
+		detail: task,
 	};
 }
 
 async function remove(params) {
-	const user = await collection.deleteOne(buildMongoId(params.id));
+	const user = await Model.findByIdAndDelete(params.id);
 
 	return {
 		message: 'Deleted',
 		detail: user,
+	};
+}
+
+async function generate(count) {
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * max);
+	}
+	const createdBy = ['TL', 'PM', 'Support', 'Chack Noris'];
+	const users = await db.collection('users').find().toArray();
+
+	for (let i = 0; i < count; i += 1) {
+		const randomTask = {
+			createdBy: createdBy[getRandomInt(createdBy.length)],
+			estimatedTime: getRandomInt(10),
+			description: `description-${getRandomInt(100)}`,
+			title: `title-${getRandomInt(100)}`,
+			assignee: users[getRandomInt(users.length)]._id,
+		};
+		const task = new Model(randomTask);
+
+		task.save();
+	}
+
+	return {
+		message: `generate ${count} tasks`,
 	};
 }
 
@@ -61,4 +82,5 @@ module.exports = {
 	find,
 	update,
 	remove,
+	generate,
 };
