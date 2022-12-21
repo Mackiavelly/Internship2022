@@ -82,19 +82,15 @@ async function singInUser(body) {
 }
 
 async function accountUser(params) {
-	const userFind = await User.findOne(buildMongoId(params.id));
+	const user = await User.findOne(buildMongoId(params.id));
 
-	if (userFind === null) {
-		return {
-			message: 'Account: user not found!',
-		};
-	}
+	if (user === null) return { message: 'Account: user not found!' };
 
-	console.log(userFind);
+	console.log(user);
 
 	return {
 		message: 'Account - Success',
-		user: userFind,
+		user,
 	};
 }
 
