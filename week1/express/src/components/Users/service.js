@@ -64,35 +64,20 @@ async function deleteUser(params) {
 async function singInUser(body) {
 	const user = await User.findOne({ email: body.email });
 
-	console.log(user);
+	if (user === null) return { message: 'SingIn: user no exists!' };
+	const compare = await user.comparePassword(body.password);
 
-	if (user === null) {
-		return {
-			message: 'SingIn: user no exists!',
-		};
-	}
+	if (!compare) return { message: 'SingIn: wrong password!' };
 
-	const compare = await user.comparePassword(body.password, (error, isMatch) => {
-		if (error) throw error;
+	const { _id: userId } = user;
+	const token = generateAccessToken({ id: userId });
 
-		return isMatch;
-	});
-
-	if (compare) {
-		const { _id: userId } = user;
-		const token = generateAccessToken({ id: userId });
-
-		user.token = token;
-		await user.save();
-
-		return {
-			message: 'Sing In - Success',
-			detail: user,
-		};
-	}
+	user.token = token;
+	await user.save();
 
 	return {
-		message: 'SingIn: wrong password!',
+		message: 'Sing In - Success',
+		detail: user,
 	};
 }
 
