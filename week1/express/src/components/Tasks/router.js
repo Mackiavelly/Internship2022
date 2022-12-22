@@ -1,9 +1,14 @@
 const { Router } = require('express');
 const component = require('./index');
 const validation = require('./validation');
+const validationToken = require('../../config/validationToken');
 const { Model, scenarios } = require('./model');
 
 const router = Router();
+
+router.get('/task', validationToken, component.pagger);
+
+router.get('/all', validationToken, component.getTasksByUserId);
 
 router.get('/', component.findAll);
 

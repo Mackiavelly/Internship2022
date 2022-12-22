@@ -1,5 +1,6 @@
 const { mongoose, db } = require('../../config/mongooseConnection');
 const { Model } = require('./model');
+const UserModel = require('../Users/model');
 
 function buildMongoId(id) {
 	const { ObjectId } = mongoose.Types;
@@ -55,18 +56,18 @@ async function generate(count) {
 	function getRandomInt(max) {
 		return Math.floor(Math.random() * max);
 	}
-	const createdBy = ['TL', 'PM', 'Support', 'Chack Noris'];
+	const createdBy = ['TL', 'PM', 'Support', 'Chuck Norris'];
 	const users = await db.collection('users').find().toArray();
 
 	for (let i = 0; i < count; i += 1) {
-		const randomTask = {
+		const task = new Model({
 			createdBy: createdBy[getRandomInt(createdBy.length)],
 			estimatedTime: getRandomInt(10),
 			description: `description-${getRandomInt(100)}`,
 			title: `title-${getRandomInt(100)}`,
+			// eslint-disable-next-line no-underscore-dangle
 			assignee: users[getRandomInt(users.length)]._id,
-		};
-		const task = new Model(randomTask);
+		});
 
 		task.save();
 	}
@@ -76,6 +77,64 @@ async function generate(count) {
 	};
 }
 
+async function pagger(params, query) {
+	const perPage = 5;
+	const page = query.page || 1;
+	const pageNumber = (page < 1) ? 1 : page;
+	const skip = (pageNumber - 1) * perPage;
+	const totalTasks = await Model
+		.find({ assignee: params.id })
+		.count();
+	const tasks = await Model
+		.find({ assignee: params.id })
+		.limit(perPage)
+		.skip(skip);
+	const detail = tasks === 0
+		? 'Empty page.'
+		: `Show page #${pageNumber}, rows ${perPage}, from ${skip + 1} to ${skip + perPage}.`;
+
+	return {
+		tasks,
+		totalTasks,
+		detail,
+	};
+}
+
+async function getTasksByUserId(params) {
+	/* eslint-disable quote-props */
+	const aggregate = [
+		{
+			'$match': buildMongoId(params.id),
+		}, {
+			'$lookup': {
+				'from': 'tasks',
+				'localField': '_id',
+				'foreignField': 'assignee',
+				'as': 'tasks',
+			},
+		}, {
+			'$project': {
+				'_id': 0,
+				'tasks': '$tasks',
+				'name': {
+					'$concat': [
+						'$firstName', ' ', '$lastName',
+					],
+				},
+				'totalTasks': {
+					'$size': '$tasks',
+				},
+				'totalEstimation': {
+					'$sum': '$tasks.estimatedTime',
+				},
+			},
+		},
+	];
+	const tasks = await UserModel.aggregate(aggregate);
+
+	return tasks;
+}
+
 module.exports = {
 	create,
 	findAll,
@@ -83,4 +142,6 @@ module.exports = {
 	update,
 	remove,
 	generate,
+	pagger,
+	getTasksByUserId,
 };

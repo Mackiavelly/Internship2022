@@ -2,10 +2,10 @@ const service = require('./service');
 
 async function findAll(req, res) {
 	try {
-		const users = await service.findAll({ ...req.query, ...req.body });
+		const objectsAll = await service.findAll({ ...req.query, ...req.body });
 
 		return res.status(200).json({
-			data: users,
+			data: objectsAll,
 		});
 	} catch (error) {
 		return res.status(500).json({
@@ -17,10 +17,10 @@ async function findAll(req, res) {
 
 async function create(req, res) {
 	try {
-		const users = await service.create(req.body);
+		const objectCreate = await service.create(req.body);
 
 		return res.status(201).json({
-			data: users,
+			data: objectCreate,
 		});
 	} catch (error) {
 		return res.status(500).json({
@@ -32,10 +32,10 @@ async function create(req, res) {
 
 async function find(req, res) {
 	try {
-		const users = await service.find(req.params, { ...req.query, ...req.body });
+		const objectOne = await service.find(req.params, { ...req.query, ...req.body });
 
 		return res.status(201).json({
-			data: users,
+			data: objectOne,
 		});
 	} catch (error) {
 		return res.status(500).json({
@@ -47,10 +47,10 @@ async function find(req, res) {
 
 async function remove(req, res) {
 	try {
-		const users = await service.remove(req.params);
+		const objectRemove = await service.remove(req.params);
 
 		return res.status(201).json({
-			data: users,
+			data: objectRemove,
 		});
 	} catch (error) {
 		return res.status(500).json({
@@ -62,10 +62,10 @@ async function remove(req, res) {
 
 async function update(req, res) {
 	try {
-		const users = await service.update(req.params, req.body);
+		const objectUpdate = await service.update(req.params, req.body);
 
 		return res.status(201).json({
-			data: users,
+			data: objectUpdate,
 		});
 	} catch (error) {
 		return res.status(500).json({
@@ -77,10 +77,40 @@ async function update(req, res) {
 
 async function generate(req, res) {
 	try {
-		const tasks = await service.generate(req.params.count);
+		const objectsGenerated = await service.generate(req.params.count);
 
 		return res.status(201).json({
-			data: tasks,
+			data: objectsGenerated,
+		});
+	} catch (error) {
+		return res.status(500).json({
+			error: error.message,
+			details: null,
+		});
+	}
+}
+
+async function pagger(req, res) {
+	try {
+		const objectsPagger = await service.pagger(req.params, req.query);
+
+		return res.status(201).json({
+			data: objectsPagger,
+		});
+	} catch (error) {
+		return res.status(500).json({
+			error: error.message,
+			details: null,
+		});
+	}
+}
+
+async function getTasksByUserId(req, res) {
+	try {
+		const objectsUsersTasks = await service.getTasksByUserId(req.params);
+
+		return res.status(200).json({
+			data: objectsUsersTasks,
 		});
 	} catch (error) {
 		return res.status(500).json({
@@ -97,4 +127,6 @@ module.exports = {
 	update,
 	find,
 	generate,
+	pagger,
+	getTasksByUserId,
 };

@@ -5,7 +5,7 @@ const User = require('./model');
 const collection = db.collection('users');
 
 function generateAccessToken(data) {
-	return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+	return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '1d' });
 }
 
 function buildMongoId(id) {
