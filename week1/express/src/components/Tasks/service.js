@@ -111,6 +111,11 @@ async function getTasksByUserId(params) {
 				'localField': '_id',
 				'foreignField': 'assignee',
 				'as': 'tasks',
+				'pipeline': [
+					{
+						'$sort': { 'estimatedTime': -1 },
+					},
+				],
 			},
 		}, {
 			'$project': {
