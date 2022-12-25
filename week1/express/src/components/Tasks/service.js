@@ -62,7 +62,7 @@ async function generate(count) {
 	for (let i = 0; i < count; i += 1) {
 		const task = new Model({
 			createdBy: createdBy[getRandomInt(createdBy.length)],
-			estimatedTime: getRandomInt(10),
+			estimatedTime: getRandomInt(20),
 			description: `description-${getRandomInt(100)}`,
 			title: `title-${getRandomInt(100)}`,
 			// eslint-disable-next-line no-underscore-dangle

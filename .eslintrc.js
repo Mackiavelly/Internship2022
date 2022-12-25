@@ -40,5 +40,6 @@ module.exports = {
 				minProperties: 5,
 			},
 		}],
+		'max-len': ['error', { code: 150 }],
 	},
 };
