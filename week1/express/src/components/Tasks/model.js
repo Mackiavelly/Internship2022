@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const scenarios = {
-	create: ['assignee', 'title', 'description', 'estimatedTime', 'createdBy'],
+	create: ['assignee', 'title', 'description', 'estimatedTime', 'createdBy', 'status'],
 	update: ['estimatedTime'],
 };
 
@@ -13,6 +13,7 @@ const schemaTasks = new Schema({
 	description: { type: String, required: true },
 	estimatedTime: { type: Number, require: true },
 	createdBy: { type: String, require: true },
+	status: { type: String },
 });
 
 module.exports = {
