@@ -1,0 +1,203 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Tasks CRUD",
+		"description": "Manage tasks",
+		"license": {
+			"name": "MIT",
+			"url": "https://opensource.org/licenses/MIT"
+		}
+	},
+	"host": "localhost:3000",
+	"basePath": "/tasks",
+	"tags": [
+		{
+			"name": "Tasks",
+			"description": "API for tasks in the system"
+		}
+	],
+	"schemes": [
+		"http"
+	],
+	"consumes": [
+		"application/json"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {
+		"/": {
+			"get": {
+				"tags": [
+					"Tasks"
+				],
+				"description": "Show all tasks in system",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Show all tasks in system",
+						"schema": {
+							"$ref": "#/components/schemas/tasks"
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"Tasks"
+				],
+				"description": "Create task",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/assignee"
+					},
+					{
+						"$ref": "#/components/parameters/title"
+					},
+					{
+						"$ref": "#/components/parameters/description"
+					},
+					{
+						"$ref": "#/components/parameters/estimatedTime"
+					},
+					{
+						"$ref": "#/components/parameters/createdBy"
+					}
+				],
+				"consumes": [
+					"application/x-www-form-urlencoded"
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Create tasks",
+						"schema": {
+							"$ref": "#/components/schemas/tasks"
+						}
+					}
+				}
+			}
+		},
+		"/{id}": {
+			"get": {
+				"tags": [
+					"Tasks"
+				],
+				"description": "Show all tasks in system",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Show tasks by ID"
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Show task by ID"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"parameters": {
+			"assignee": {
+				"in": "formData",
+				"name": "assignee",
+				"required": true,
+				"schema": {
+					"type": "string"
+				},
+				"description": "User ID"
+			},
+			"title": {
+				"in": "formData",
+				"name": "title",
+				"required": true,
+				"schema": {
+					"type": "string"
+				},
+				"description": "Task title"
+			},
+			"description": {
+				"in": "formData",
+				"name": "description",
+				"required": true,
+				"schema": {
+					"type": "string"
+				},
+				"description": "Task description"
+			},
+			"estimatedTime": {
+				"in": "formData",
+				"name": "estimatedTime",
+				"required": true,
+				"schema": {
+					"type": "number"
+				},
+				"description": "Task estimatedTime"
+			},
+			"createdBy": {
+				"in": "formData",
+				"name": "createdBy",
+				"required": true,
+				"schema": {
+					"type": "string"
+				},
+				"description": "Task createdBy"
+			},
+			"status": {
+				"in": "formData",
+				"name": "status",
+				"required": false,
+				"schema": {
+					"type": "string"
+				},
+				"description": "Task status"
+			}
+		},
+		"schemas": {
+			"tasks": {
+				"title": "tasks",
+				"required": [
+					"assignee",
+					"title",
+					"description",
+					"estimatedTime",
+					"createdBy"
+				],
+				"properties": {
+					"assignee": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"estimatedTime": {
+						"type": "number"
+					},
+					"createdBy": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"_id": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}

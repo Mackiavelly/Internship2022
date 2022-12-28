@@ -1,10 +1,25 @@
 const { Router } = require('express');
+const m2s = require('mongoose-to-swagger');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const component = require('./index');
 const validation = require('./validation');
 const validationToken = require('../../config/validationToken');
 const { Model, scenarios } = require('./model');
 
 const router = Router();
+const swaggerSchemas = m2s(Model);
+
+const optionsSwagger = {
+	components: {
+		schemas: {
+			tasks: swaggerSchemas,
+		},
+	},
+};
+
+router.use('/api-docs', swaggerUi.serve);
+router.get('/api-docs', swaggerUi.setup(swaggerDocument, optionsSwagger));
 
 router.get('/task', validationToken, component.pagger);
 

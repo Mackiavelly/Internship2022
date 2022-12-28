@@ -21,7 +21,7 @@ const config = {
 	migrationsDir: 'migrations',
 
 	// The mongodb collection where the applied changes are stored. Only edit this when really necessary.
-	changelogCollectionName: 'changelog',
+	changelogCollectionName: 'migrations',
 
 	// The file extension to create migrations and search for in migration dir
 	migrationFileExtension: '.js',
